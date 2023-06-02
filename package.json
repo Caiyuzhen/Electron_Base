@@ -1,0 +1,23 @@
+{
+  "name": "electron_base",
+  "version": "1.0.0",
+  "description": "base eletron",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Caiyuzhen/Electron_Base.git"
+  },
+  "author": "zeno",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Caiyuzhen/Electron_Base/issues"
+  },
+  "homepage": "https://github.com/Caiyuzhen/Electron_Base#readme",
+  "devDependencies": {
+    "electron": "^25.0.1"
+  }
+}
