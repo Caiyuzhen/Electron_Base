@@ -1,4 +1,6 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, contextBridge, ipcRenderer } = require('electron')
+const path = require('path')
+
 
 
 // 运行主进程 -> 创建窗口 -> 创建渲染进程
@@ -15,6 +17,7 @@ const { app, BrowserWindow } = require('electron')
 		closed				窗口关闭后触发
  */
 
+// 👇【主进程】
 // ✏️ 创建窗口的方法 ————————————————————————————————————————————————————————————————————————————————————————————————
 function createWin () {
 	let mainWindow = new BrowserWindow({
@@ -27,8 +30,23 @@ function createWin () {
 		width: 600,// 窗口宽度
 		maxWidth: 1600,// 设置窗口拉伸最大值
 		minWidth: 400,// 设置窗口拉伸最小值
-		resizable: false, //不允许缩放窗口
+		resizable: true, //允许缩放窗口
+		title: 'Rocket Dev',
+		icon: './icon/rocket.ico',
+		webPreferences: {
+			nodeIntegration: true, //👈 允许渲染进行使用 Node
+			contextIsolation: false, //👈 允许渲染进行使用 Node
+			enableRemoteModule: true, //👈 允许渲染进行使用 Node
+		}
+		// frame: true, //顶部的系统菜单栏
+		// autoHideMenuBar: true, //自动隐藏菜单栏
+		// transparent: true, //透明窗口(可以用在比如歌词窗口)
 	})
+
+	// 👇 引入打开第二个窗口的方法
+	require("@electron/remote/main").initialize()
+	require("@electron/remote/main").enable(mainWindow.webContents)
+
 
 	mainWindow.on('ready-to-show', () => {
 		mainWindow.show() //👀等内容加载完后再显示窗口(避免白屏)
