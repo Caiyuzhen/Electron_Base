@@ -6,9 +6,75 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- <title>A Magic App</title> -->
 </head>
+<style>
+	* {
+		margin: 0;
+		padding: 0;
+	}
+
+	html,body {
+		height: 100%;
+	}
+
+	.box {
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		background-color: seashell;
+	}
+
+	.topBar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 40px;
+		box-shadow: 0 1 6px 0px #333;
+		border-bottom: 1px solid #ccc;
+	}
+
+	.leftTitleContainer {
+		display: flex;
+		flex-direction: row;
+		gap: 8px;
+		width: 192px;
+		float: left;
+		margin-left: 12px;
+	}
+
+	.rightIconContainer {
+		display: flex;
+		flex-direction: row;
+		gap: 12px;
+		margin-right: 12px;
+	}
+
+	.leftTitle {
+		font-weight: 500;
+	}
+
+	.bottomContainer {
+		float: left;
+		height: 100%;
+	}
+</style>
 <body>
-	<h2>👋 Hey~</h2>
-	<button id="btn-1">点击打开新窗口</button>
-	<script src="./index.js"></script>
+	<div class="box">
+		<div class="topBar">
+			<div class="leftTitleContainer">
+				<img src="./icon/rocket.ico" width="24px" alt="">
+				<div class="leftTitle">Magic App</div>
+			</div>
+			<div class="rightIconContainer">
+				<img src="./icon/icon_minWin.png" width="18px" alt="">
+				<img src="./icon/icon_maxWin.png" width="18px" alt="">
+				<img src="./icon/icon_close.png" width="18px" alt="">
+			</div>
+		</div>
+		<div class="bottomContainer">
+			<h2>👋 Hey~</h2>
+			<button id="btn-1">点击打开新窗口</button>
+		</div>
+	</div>
 </body>
+<script src="./index.js"></script>
 </html>
