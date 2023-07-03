@@ -32,7 +32,7 @@
 		border-bottom: 1px solid #ccc;
 	}
 
-	.leftTitleContainer {
+	.leftTitle {
 		display: flex;
 		flex-direction: row;
 		gap: 8px;
@@ -41,14 +41,14 @@
 		margin-left: 12px;
 	}
 
-	.rightIconContainer {
+	.windowTool {
 		display: flex;
 		flex-direction: row;
 		gap: 12px;
 		margin-right: 12px;
 	}
 
-	.leftTitle {
+	.title {
 		font-weight: 500;
 	}
 
@@ -60,14 +60,20 @@
 <body>
 	<div class="box">
 		<div class="topBar">
-			<div class="leftTitleContainer">
+			<div class="leftTitle">
 				<img src="./icon/rocket.ico" width="24px" alt="">
-				<div class="leftTitle">Magic App</div>
+				<div class="title">Magic App</div>
 			</div>
-			<div class="rightIconContainer">
-				<img src="./icon/icon_minWin.png" width="18px" alt="">
-				<img src="./icon/icon_maxWin.png" width="18px" alt="">
-				<img src="./icon/icon_close.png" width="18px" alt="">
+			<div class="windowTool">
+				<div class="miniSize">
+					<img src="./icon/icon_minWin.png" width="18px" alt="">
+				</div>
+				<div class="maxSize">
+					<img src="./icon/icon_maxWin.png" width="18px" alt="">
+				</div>
+				<div class="close">
+					<img src="./icon/icon_close.png" width="18px" alt="">
+				</div>
 			</div>
 		</div>
 		<div class="bottomContainer">
