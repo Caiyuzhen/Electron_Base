@@ -35,11 +35,13 @@ window.addEventListener('DOMContentLoaded', () => {
 		// 🚀 创建一个新窗口
 		// alert('msg')
 		let indexWindow = new BrowserWindow({
+			parent: currentWindow, //👈设置父窗口为谁 (如果有父子关系的话, 则会拖动时会跟随移动)
+			// modal: true, //需要有父子关系才能设置为 模态弹窗！ 会禁用底部的操作
 			width: 200,
 			height: 200,
 		})
 		
-		indexWindow.loadFile('list.html')
+		indexWindow.loadFile('sub.html')
 
 		indexWindow.on('close', () => {
 			indexWindow = null
