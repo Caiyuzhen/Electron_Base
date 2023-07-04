@@ -56,13 +56,59 @@
 		float: left;
 		height: 100%;
 	}
+
+	.isClose {
+		z-index: 999;
+		width: 480px;
+		height: 400px;
+		background-color: #ffffff;
+		border-radius: 10px;
+		display: flex;
+		flex-direction: column;
+		display: none;
+		box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+	}
+
+	.dialog_info {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.close_btn {
+
+		display: flex;
+		flex-direction: row;
+	}
+	
+	.btn-1 {
+		width: 88px;
+		height: 32px;
+		background-color: #bf3266;
+		cursor: pointer;
+		border-radius: 8px;
+		text-align: center;
+		line-height: 32px;
+		color: white;
+	}
+
+	.btn-2 {
+		width: 88px;
+		height: 32px;
+		background-color: #cccbe8;
+		cursor: pointer;
+		border-radius: 8px;
+		text-align: center;
+		line-height: 32px;
+		color: white;
+	}
+
 </style>
 <body>
 	<div class="box">
 		<div class="topBar">
 			<div class="leftTitle">
 				<img src="./icon/rocket.ico" width="24px" alt="">
-				<div class="title">Magic App</div>
+				<div class="title">Magic A11pp</div>
 			</div>
 			<div class="windowTool">
 				<div class="miniSize">
@@ -80,16 +126,18 @@
 			<h2>👋 Hey~</h2>
 			<button id="btn-1">点击打开新窗口</button>
 		</div>
-	</div>
 
-	<!-- 关闭的弹窗 -->
-	<div class="isClose">
-		<h3>是否关闭当前应用？</h3>
-		<p>系统可能不会保存您的所有更改</p>
-		<p class="close_btn">
-			<span>是</span>
-			<span>否</span>
-		</p>
+		<!-- 关闭的弹窗 -->
+		<div class="isClose">
+			<div class="dialog_info">
+				<h3>是否关闭当前应用？</h3>
+				<p>系统可能不会保存您的所有更改</p>
+			</div>
+			<p class="close_btn">
+				<span class="btn-1">是</span>
+				<span class="btn-2">否</span>
+			</p>
+		</div>
 	</div>
 </body>
 <script src="./index.js"></script>

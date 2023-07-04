@@ -4,7 +4,31 @@
 const BrowserWindow = require("@electron/remote").BrowserWindow
 const currentWindow = require("@electron/remote").getCurrentWindow() // 获取当前的窗口对象 ger Current Window
 
+
+// 加载完毕后执行
 window.addEventListener('DOMContentLoaded', () => {
+	// 👇关闭窗口前的提醒
+	window.onbeforeunload = () => {
+		console.log('11')
+		const dialog = document.querySelector('.isClose')
+		const yesBtn = document.querySelector('.btn-1')
+		const noBtn = document.querySelector('.btn-2')
+
+		dialog.style.display = 'block'
+
+		yesBtn.addEventListener('click', () => {
+			currentWindow.destroy() //👈避免 close() 死循环
+		})
+
+		noBtn.addEventListener('click', () => {
+			dialog.style.display = 'none'
+		})
+
+		return false
+	}
+
+
+
 	// 👇新建窗口的事件
 	const btn1 = document.getElementById('btn-1')
 	btn1.addEventListener('click', () => {
@@ -37,11 +61,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	maxSizeBtn.addEventListener('click', () => {
 		//如果当前没有最大化, 则调用最大化的方法, 否则回到
-		console.log(currentWindow.isMaximized()) // isMaximized 方法
+		console.log('是否最大化:', currentWindow.isMaximized()) // isMaximized 方法
 		if(!currentWindow.isMaximized()) { //如果不是最大化
 			currentWindow.maximize() //最大化
 		} else {
-			currentWindow.restore() //取消最大化, 回到最大化之前的样子
+			currentWindow.unmaximize() //取消最大化, 回到最大化之前的样子
+			// currentWindow.restore() 
 		}
 	})
 
