@@ -81,31 +81,31 @@ function createWin () {
 
 
 
-	// 🦐 自定义菜单
+	// 🦐 自定义菜单 (Electron 的 Menu 类要求菜单模板中的每个菜单项都必须具有label、role或type属性中的至少一个)
 	const template = [
 		{
-			label: 'Logo',
+			label: '',
 			submenu: [ //系统菜单
-				{ role: 'about' },
+				{ role: 'about', icon: nativeImage.createFromPath('./icon/icon_cms.png').resize({ width: 16, height: 16 })}, //role 都是 electron 内好的选项
 				{ type: 'separator' },
 				{ role: 'services' },
-				{ type: 'separator' },
+				{ type: 'separator' }, //分割线, type 是内置好的元素
 				{ role: 'hide' },
 				{ role: 'hideOthers' },
 				{ role: 'unhide' },
 				{ type: 'separator' },
 				{ role: 'quit' },
-
 			],
 		},
 		{
-			label: '文件',
+			label: '文件', // label 为菜单名称
         	submenu: [
 				{
-					label: '打开文件' ,
+					label: '打开文件' , // label 为菜单名称
 					accelerator: 'CmdOrCtrl+N', //快捷键
 					click: () => {
 						console.log('打开了文件')
+						console.log(process.platform) // 查看操作系统 darwin 为操作系统
 					}
 				},
 			],
@@ -113,26 +113,45 @@ function createWin () {
 		{
 			label: '编辑',
 			submenu: [
-				{ role: 'undo' },
-				{ role: 'redo' },
+				{ label: '取消', role: 'undo' },
+				{ label: '重做', role:'redo' },
 				{ type: 'separator' }, //分割线
-				{ role: 'cut' },
-				{ role: 'copy' },
-				{ role: 'paste' },
+				{ label: '剪切', role: 'cut' },
+				{ label: '复制', role: 'copy' },
+				{ label: '粘贴', role: 'paste' },
 			],
+		},
+		{
+			label: '类型',
+			submenu: [
+				{ label: '选项 1', type: 'checkbox', click: () => { console.log('选项 1') } },
+				{ label: '选项 2', type: 'checkbox', click: () => { console.log('选项 2') } },
+				{ label: '选项 3', type: 'checkbox', click: () => { console.log('选项 3') } },
+				{ type: 'separator' },
+				{ label: 'item 1', type: 'radio', click: () => { console.log('item 1') } },
+				{ label: 'item 2', type: 'radio', click: () => { console.log('item 2') } },
+				{ label: 'item 3', type: 'radio', click: () => { console.log('item 3') } },
+				{ type: 'separator' },
+				{ label: '一个级菜单', type: 'submenu', role: 'windowMenu'}, //🚀二级菜单
+				{ label: '另一个菜单', type: 'submenu', //🚀二级菜单
+					submenu: [
+						{ label: '选项 1', accelerator: 'CmdOrCtrl+1', type: 'checkbox', click: () => { console.log('选项 1') } },
+						{ label: '选项 2', type: 'checkbox', click: () => { console.log('选项 2') } },
+						{ label: '选项 3', type: 'checkbox', click: () => { console.log('选项 3') } },
+				]},
+			]
 		},
 		{
 			label: '视图',
 			submenu: [
-				{ role: 'reload' },
-				{ role: 'forceReload' },
-				{ role: 'toggleDevTools' },
+				{ label: '重新加载', role: 'reload' },
+				{ label: '强制重新加载', role: 'forceReload' },
+				{ label: '打开开发者工具', role: 'toggleDevTools' },
 				{ type: 'separator' },
-				{ role: 'resetZoom' },
-				{ role: 'zoomIn' },
-				{ role: 'zoomOut' },
+				{ label: '重制视图', role: 'resetZoom' },
+				{ label: '放大', role: 'zoomIn' },
+				{ label: '缩小', role: 'zoomOut' },
 				{ type: 'separator' }, //分割线
-				{ role: 'togglefullscreen' },
 			],
 			accelerator: 'CmdOrCtrl+Shift+I',
 			click: () => {
@@ -140,18 +159,6 @@ function createWin () {
 				win.webContents.openDevTools()
 			}
 		},
-
-		// 👇 Electron 的 Menu 类要求菜单模板中的每个菜单项都必须具有label、role或type属性中的至少一个
-		// 		// { role: 'reload' },
-		// 		// { role: 'forceReload' },
-		// 		// { role: 'toggleDevTools' },
-		// 		// { type: 'separator' },
-		// 		// { role: 'resetZoom' },
-		// 		// { role: 'zoomIn' },
-		// 		// { role: 'zoomOut' },
-		// 		// { type: 'separator' },
-		// 		// { role: 'togglefullscreen' },
-		// { label: 'Menu Item 2', type: 'checkbox', checked: true }
 	]
 	const menu = Menu.buildFromTemplate(template)
 	Menu.setApplicationMenu(menu)

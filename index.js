@@ -3,6 +3,7 @@
 // const { BrowserWindow } = require('electron')
 const BrowserWindow = require("@electron/remote").BrowserWindow
 const currentWindow = require("@electron/remote").getCurrentWindow() // 获取当前的窗口对象 ger Current Window
+const { MenuItem, Menu } = require("@electron/remote")
 
 
 // 加载完毕后执行
@@ -49,6 +50,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	})
 
 
+
 	// 👇右侧窗口 icon 的事件
 	let rightBtn = document.querySelectorAll('.windowTool')[0].getElementsByTagName('div')
 	let miniSizeBtn = rightBtn[0]
@@ -74,6 +76,48 @@ window.addEventListener('DOMContentLoaded', () => {
 
 	closeBtn.addEventListener('click', () => {
 		currentWindow.close() //关闭窗口
+	})
+
+
+
+	// 👇输入框事件（自定义菜单）
+	let customBtn = document.querySelector('.custom-menu')
+	let content = document.querySelector('#menuCon')
+	let addBtn = document.querySelector('.add-menu')
+
+
+
+	// 👇替换为自己的菜单
+	customBtn.addEventListener('click', () => {
+		// 创建 menu 菜单
+		let menuA = new MenuItem({label: 'AAA', type: 'normal'})
+		let customMenu2 = new MenuItem({label: '自定义菜单', type: 'submenu', submenu: [{ label: '重载', role: 'reload' },{ label: '重做', role:'redo' },]})
+		let customMenu3 = new MenuItem({label: '自定义菜单', type: 'submenu', submenu: [{ label: '取消', role: 'undo' },{ label: '剪切', role:'cut' },]})
+	
+		let menu = new Menu()
+		menu.append(menuA)
+		menu.append(customMenu2)
+		menu.append(customMenu3)
+
+		Menu.setApplicationMenu(menu) //👈挂载菜单
+	})
+
+
+	// 👇动态的添加菜单项
+	let menuItem = new Menu() // 全局菜单配置项, 结婚日输入框的内容
+	addBtn.addEventListener('click', () => {
+		let context = content.value.trim() //去除空格
+
+		// 获取输入框的内容(内容不为空时)
+		if(content.value) {
+			menuItem.append(new MenuItem({label: context, type: 'normal'}))
+			content.value = '' //清空输入框
+		}
+
+		let menu = new Menu()
+		menu.append(menuItem)
+
+		Menu.setApplicationMenu(menu) //👈挂载菜单
 	})
 
 })

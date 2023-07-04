@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!-- <title>A Magic App</title> -->
+	<!-- <title>A Magic App 渲染进程</title> -->
 </head>
 <style>
 	* {
@@ -21,6 +21,8 @@
 		height: 100%;
 		overflow: hidden;
 		background-color: seashell;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.topBar {
@@ -46,6 +48,22 @@
 		flex-direction: row;
 		gap: 12px;
 		margin-right: 12px;
+	}
+
+	.miniSize,.maxSize,.close {
+		width: 24px;
+		height: 24px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+	}
+
+	.miniSize:hover,.maxSize:hover,.close:hover {
+		width: 24px;
+		height: 24px;
+		border-radius: 8px;
+		background-color: #b8b5be;
 	}
 
 	.title {
@@ -75,7 +93,6 @@
 	}
 
 	.close_btn {
-
 		display: flex;
 		flex-direction: row;
 	}
@@ -127,6 +144,18 @@
 			<button id="btn-1">点击打开新窗口</button>
 		</div>
 
+
+		<br>
+		<!-- 输入框 -->
+		<div class="input-container">
+			<button class="custom-menu">创建自定义菜单</button>
+			<br>
+			<input type="text" placeholder="输入自定义菜单项内容" id="menuCon">
+			<br>
+			<button class="add-menu">添加自定义菜单项</button>
+		</div>
+
+		<br>
 		<!-- 关闭的弹窗 -->
 		<div class="isClose">
 			<div class="dialog_info">
