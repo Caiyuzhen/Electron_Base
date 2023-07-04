@@ -102,6 +102,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		Menu.setApplicationMenu(menu) //👈挂载菜单
 	})
 
+	
 
 	// 👇动态的添加菜单项
 	let menuItem = new Menu() // 全局菜单配置项, 结婚日输入框的内容
