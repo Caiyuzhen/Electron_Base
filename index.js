@@ -1,4 +1,4 @@
-// 👇【渲染进程】, 无法使用 Node, 除非在 main.js 这个主进程中设置 webPreferences, 并且需要安装 npm install @electron/remote --save 包
+// 👇【渲染进程(实际的内容都是渲染进程)】, 无法使用 Node, 除非在 main.js 这个主进程中设置 webPreferences, 并且需要安装 npm install @electron/remote --save 包
 // References: https://blog.csdn.net/baixue0111/article/details/122088933
 // const { BrowserWindow } = require('electron')
 const BrowserWindow = require("@electron/remote").BrowserWindow
@@ -8,7 +8,7 @@ const { MenuItem, Menu } = require("@electron/remote")
 
 // 加载完毕后执行
 window.addEventListener('DOMContentLoaded', () => {
-	// 👇关闭窗口前的提醒
+	// 👇 【关闭窗口前的提醒】 _________________________________________________________________________________
 	window.onbeforeunload = () => {
 		console.log('11')
 		const dialog = document.querySelector('.isClose')
@@ -30,7 +30,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 
-	// 👇新建窗口的事件
+	// 👇 【新建父子窗口】 _________________________________________________________________________________
 	const btn1 = document.getElementById('btn-1')
 	btn1.addEventListener('click', () => {
 		// 🚀 创建一个新窗口
@@ -51,7 +51,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 
-	// 👇右侧窗口 icon 的事件
+	// 👇 【右侧 3 个窗口 icon】 _________________________________________________________________________________
 	let rightBtn = document.querySelectorAll('.windowTool')[0].getElementsByTagName('div')
 	let miniSizeBtn = rightBtn[0]
 	let maxSizeBtn = rightBtn[1]
@@ -80,14 +80,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 
-	// 👇输入框事件（自定义菜单）
+	// 👇 【动态的自定义菜单】 _________________________________________________________________________________
 	let customBtn = document.querySelector('.custom-menu')
 	let content = document.querySelector('#menuCon')
 	let addBtn = document.querySelector('.add-menu')
 
 
-
-	// 👇替换为自己的菜单
+	// 替换为自己的菜单
 	customBtn.addEventListener('click', () => {
 		// 创建 menu 菜单
 		let menuA = new MenuItem({label: 'AAA', type: 'normal'})
@@ -99,12 +98,11 @@ window.addEventListener('DOMContentLoaded', () => {
 		menu.append(customMenu2)
 		menu.append(customMenu3)
 
-		Menu.setApplicationMenu(menu) //👈挂载菜单
+		Menu.setApplicationMenu(menu) //👈挂载到顶部菜单
 	})
 
 	
-
-	// 👇动态的添加菜单项
+	// 获取输入框的内容, 并且添加到菜单中
 	let menuItem = new Menu() // 全局菜单配置项, 结婚日输入框的内容
 	addBtn.addEventListener('click', () => {
 		let context = content.value.trim() //去除空格
@@ -118,7 +116,29 @@ window.addEventListener('DOMContentLoaded', () => {
 		let menu = new Menu()
 		menu.append(menuItem)
 
-		Menu.setApplicationMenu(menu) //👈挂载菜单
+		Menu.setApplicationMenu(menu) //👈挂载到顶部菜单
 	})
+
+
+	// 👇 【右键菜单】 _________________________________________________________________________________
+	let contextTemp = [
+		{label: '启动'},
+		{label: '跳转'},
+		{
+			label: '其他',
+			click() {
+				console.log('被点击了')
+			}
+		}
+	]
+
+	let rightMenu = Menu.buildFromTemplate(contextTemp)
+
+	window.addEventListener('contextmenu', (e) => { // ⚡️ contextmenu 右键
+		e.preventDefault() //阻止某些元素的默认右键事件
+		rightMenu.popup({ //👈弹出右键菜单
+			window: currentWindow //在哪个窗口进行弹出
+		}) 
+	}, false) // false: 冒泡阶段, true: 捕获阶段
 
 })
