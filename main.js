@@ -1,4 +1,4 @@
-const { app, BrowserWindow, contextBridge, ipcRenderer, nativeImage, Menu } = require('electron')
+const { app, BrowserWindow, contextBridge, ipcMain, nativeImage, Menu } = require('electron')
 const path = require('path')
 
 
@@ -147,6 +147,10 @@ function createWin () {
 				{ label: '重新加载', role: 'reload' },
 				{ label: '强制重新加载', role: 'forceReload' },
 				{ label: '打开开发者工具', role: 'toggleDevTools' },
+				{ label: 'dev', click: () => {		
+					const win = BrowserWindow.getFocusedWindow() //🔥 getFocusedWindow 找到当前正在进行的渲染进程
+					win.webContents.openDevTools() //🔥 webContents 拿到渲染进程的所有内容
+				}},
 				{ type: 'separator' },
 				{ label: '重制视图', role: 'resetZoom' },
 				{ label: '放大', role: 'zoomIn' },
@@ -154,11 +158,16 @@ function createWin () {
 				{ type: 'separator' }, //分割线
 			],
 			accelerator: 'CmdOrCtrl+Shift+I',
-			click: () => {
-				const win = BrowserWindow.getFocusedWindow()
-				win.webContents.openDevTools()
-			}
 		},
+		{
+			label: '给渲染进程发送消息',
+			submenu: [
+				{ label: '发送消息', click: () => {
+						BrowserWindow.getFocusedWindow().send('mtp', '🚀 我是主进程发送的消息-2')
+					}
+				}
+			]	
+		}
 	]
 	const menu = Menu.buildFromTemplate(template)
 	Menu.setApplicationMenu(menu)
@@ -213,26 +222,19 @@ app.on('quit', () => {
 
 
 
+// 🚀 【主进程与渲染进程的通讯】 ————————————————————————————————————————————————————————————————————————————————————————————————
+ipcMain.on('msg', (e, data) => { 
+	console.log(data) // 接收渲染进程发来的异步消息 data
+
+	// 往渲染进程发送消息
+	e.sender.send('reply', '我是主进程发来的异步消息')
+})
 
 
+ipcMain.on('msg2', (e, data) => {
+	console.log(data) // 接收渲染进程发来的同步消息 data
+
+	e.returnValue = '我是主进程发来的同步消息'
+})
 
 
-// app.whenReady().then(() => {
-// 	const mainWindow = new BrowserWindow({
-// 		window: 600,
-// 		height: 400,
-// 	})
-
-// 	// 在当前窗口中加载指定的界面 (html)
-// 	mainWindow.loadFile('index.html')
-
-// 	// 窗口关闭事件
-// 	mainWindow.on('close', () => {
-// 		console('窗口关闭了')
-// 	})
-// })
-
-// app.on('window-all-closed', () => {
-// 	console('所有窗口都关闭了')
-// 	app.quit() //退出 app
-// })

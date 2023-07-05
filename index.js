@@ -4,6 +4,7 @@
 const BrowserWindow = require("@electron/remote").BrowserWindow
 const currentWindow = require("@electron/remote").getCurrentWindow() // 获取当前的窗口对象 ger Current Window
 const { MenuItem, Menu } = require("@electron/remote")
+const { ipcRenderer } = require('electron') // 引入 ipcRenderer 用于渲染进程和主进程之间的通信
 
 
 // 加载完毕后执行
@@ -38,8 +39,8 @@ window.addEventListener('DOMContentLoaded', () => {
 		let indexWindow = new BrowserWindow({
 			parent: currentWindow, //👈设置父窗口为谁 (如果有父子关系的话, 则会拖动时会跟随移动)
 			// modal: true, //需要有父子关系才能设置为 模态弹窗！ 会禁用底部的操作
-			width: 200,
-			height: 200,
+			width: 800,
+			height: 800,
 		})
 		
 		indexWindow.loadFile('sub.html')
@@ -142,3 +143,40 @@ window.addEventListener('DOMContentLoaded', () => {
 	}, false) // false: 冒泡阶段, true: 捕获阶段
 
 })
+
+
+
+// 👇 【渲染进程与主进程的通讯】 _________________________________________________________________________________
+window.onload = function() {
+	let aBtn = document.querySelector('.btn-55')
+	let cBtn = document.querySelector('.btn-66')
+
+	//向主进程发送异步消息
+	aBtn.addEventListener('click', () => { 
+		ipcRenderer.send('msg', '😄这是渲染进程, 向主进程发送异步消息')
+	})
+
+	ipcRenderer.on('reply', (event, data) => { //接收主进程的异步消息
+		console.log(data)
+	})
+
+	cBtn.addEventListener('click', () => {
+		let val = ipcRenderer.sendSync('msg2', '😄这是渲染进程, 向主进程发送同步消息')
+		console.log(val) //等待主进程返回的值（同步消息）
+	})
+
+	ipcRenderer.on('mtp', (e, data) => {
+		console.log('获得主进程主动发来的消息:', data)
+	})
+}
+
+
+// 👇 【渲染进程之间的通讯】 _________________________________________________________________________________
+window.onload = function() {
+	let btn8 = document.querySelector('.btn-88')
+	btn8.addEventListener('click', () => { 
+		ipcRenderer.send('winA', '😄这是渲染进程 A')
+		// 打开窗户 2 后保存数据
+		localStorage.setItem('winAData', '啦啦啦')
+	})
+}

@@ -122,6 +122,7 @@
 </style>
 <body>
 	<div class="box">
+		<!-- 顶部栏 -->
 		<div class="topBar">
 			<div class="leftTitle">
 				<img src="./icon/rocket.ico" width="24px" alt="">
@@ -156,6 +157,8 @@
 		</div>
 
 		<br>
+
+
 		<!-- 关闭的弹窗 -->
 		<div class="isClose">
 			<div class="dialog_info">
@@ -167,6 +170,15 @@
 				<span class="btn-2">否</span>
 			</p>
 		</div>
+
+		<br>
+		<button class="btn-88">给另一个渲染进程发送消息</button>
+		<br>
+
+
+		<!-- 主进程与渲染进程的通讯 -->
+		<button class="btn-55">发送异步信息给主进程</button>
+		<button class="btn-66">发送同步信息给主进程</button>
 	</div>
 </body>
 <script src="./index.js"></script>
