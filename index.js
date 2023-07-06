@@ -172,10 +172,10 @@ window.onload = function() {
 
 
 // 👇 【渲染进程之间的通讯】 _________________________________________________________________________________
-window.onload = function() {
+window.onload = function() { //给 winB 发送消息
 	let btn8 = document.querySelector('.btn-88')
 	btn8.addEventListener('click', () => { 
-		ipcRenderer.send('winA', '😄这是渲染进程 A')
+		ipcRenderer.send('openWinB', '😄这是渲染进程 A')
 		// 打开窗户 2 后保存数据
 		localStorage.setItem('winAData', '啦啦啦')
 	})

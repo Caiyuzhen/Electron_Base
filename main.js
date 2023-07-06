@@ -19,6 +19,7 @@ const path = require('path')
 
 // 👇【主进程】
 // ✏️ 创建窗口的方法 ————————————————————————————————————————————————————————————————————————————————————————————————
+let mainWinID//存放主窗口 id
 function createWin () {
 	let mainWindow = new BrowserWindow({
 		frame: false, //显示系统栏
@@ -60,6 +61,7 @@ function createWin () {
 
 	// 在当前窗口中加载指定的界面 (html)
 	mainWindow.loadFile('index.html') //加载本地 html 文件
+	mainWinID = mainWindow.id
 
 	// DOM 元素完成加载
 	mainWindow.webContents.on('dom-ready', () => {
@@ -238,3 +240,23 @@ ipcMain.on('msg2', (e, data) => {
 })
 
 
+
+
+// index.js (渲染进程)  =>  main.js（主进程）  =>  winB.js (渲染进程)
+// 接收到 winA（一个渲染进程） 发来的消息, 并且打开 winB（另一个渲染进程）
+ipcMain.on('openWinB', () => {
+	let subWinB = new BrowserWindow({
+		width: 400,
+		height: 300,
+		parent: BrowserWindow.fromId(mainWinID),//🔥指定父窗口的 id, 形成父子关系
+		webPreferences: {
+			nodeIntegration: true, //👈 允许渲染进行使用 Node
+			contextIsolation: false, //👈 允许渲染进行使用 Node
+			enableRemoteModule: true, //👈 允许渲染进行使用 Node
+		}
+	})
+	subWinB.loadFile('winB.html')
+	subWinB.on('close', () => {
+
+	})
+})
