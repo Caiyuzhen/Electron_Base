@@ -242,9 +242,8 @@ ipcMain.on('msg2', (e, data) => {
 
 
 
-// index.js (渲染进程)  =>  main.js（主进程）  =>  winB.js (渲染进程)
 // 接收到 winA（一个渲染进程） 发来的消息, 并且打开 winB（另一个渲染进程）
-ipcMain.on('openWinB', () => {
+ipcMain.on('openWinB', () => { // index.js (渲染进程)  =>  main.js（主进程中专）  =>  winB.js (渲染进程)
 	let subWinB = new BrowserWindow({
 		width: 400,
 		height: 300,
@@ -257,6 +256,12 @@ ipcMain.on('openWinB', () => {
 	})
 	subWinB.loadFile('winB.html')
 	subWinB.on('close', () => {
-
 	})
+})
+
+
+ipcMain.on('stm', (e, data) => { //从 winB.js => main.js => index.js
+	// 将 data 转交给指定的渲染进程, 可以根据当前指定的窗口 id 来获取对应的渲染进程
+	let mainWin = BrowserWindow.fromId(mainWinID)
+	mainWin.webContents.send('returnToIndex', data) //webContents 可以控制窗口内的内容（渲染·进程）, 👈这里相当于转发消息
 })
