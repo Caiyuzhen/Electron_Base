@@ -119,6 +119,16 @@
 		color: white;
 	}
 
+	.btn-group2 {
+		display: flex;
+		flex-direction: row;
+	}
+
+	#webview {
+		width: 400px;
+		height: 400px;
+	}
+
 </style>
 <body>
 	<div class="box">
@@ -174,6 +184,28 @@
 		<br>
 		<button class="btn-88">给另一个渲染 winB 进程发送消息</button>
 		<br>
+
+
+		<!-- 对话框组件 -->
+		<div class="btn-group2">
+			<button id="dialog">显示文件选择框</button>
+			<button id="btn-err">显示报错的对话框</button>
+		</div>
+
+
+		<!-- 打开 URL -->
+		<h4>URL 与 iFrame</h4>
+		<div class="btn-group2"></div>
+			<!-- 🌟利用 shell 的能力 -->
+			<div>
+				<a href="https://www.google.com" id="openURL">打开 URL </a> 
+			</div>	
+			<button id="openFile">打开当前项目的目录</button>
+		</div>
+
+		<!-- Iframe  -->
+		<iframe src="https://www.36kr.com/" frameborder="0" id="webview"></iframe>
+
 
 
 		<!-- 主进程与渲染进程的通讯 -->

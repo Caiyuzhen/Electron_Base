@@ -5,6 +5,9 @@ const BrowserWindow = require("@electron/remote").BrowserWindow
 const currentWindow = require("@electron/remote").getCurrentWindow() // 获取当前的窗口对象 ger Current Window
 const { MenuItem, Menu } = require("@electron/remote")
 const { ipcRenderer } = require('electron') // 引入 ipcRenderer 用于渲染进程和主进程之间的通信
+const { dialog } = require('@electron/remote') // 引入对话框组件
+const { shell } = require('@electron/remote')
+const path = require('path')
 
 
 // 加载完毕后执行
@@ -171,19 +174,97 @@ window.onload = function() {
 }
 
 
-// 👇 【渲染进程之间的通讯】 _________________________________________________________________________________
-window.onload = function() { 
+
+
+window.onload = function () {
+	// 👇 【渲染进程之间的通讯】 _________________________________________________________________________________
 	//给 winB 发送消息【基于 loaclStorage 的方法】（通过 main.js 中转） ————————————————————————————————
 	let btn8 = document.querySelector('.btn-88')
 	btn8.addEventListener('click', () => { 
-		ipcRenderer.send('openWinB', '😄这是渲染进程 A')
+		ipcRenderer.send('openWinB', '😄这是渲染进程 A') // 【win to index 方法二】第一步
 		// 打开窗户 2 后保存数据
-		localStorage.setItem('winAData', '啦啦啦')
+		// localStorage.setItem('winAData', '啦啦啦') //🔥先删除, 方法二不基于 localStorage
 	})
 
 
 	// 接收 winB 发来的消息（通过 main.js 中转） ————————————————————————————————
+	// winB.js 发送数据到 index.js
 	ipcRenderer.on('returnToIndex', (e, data) => {
 		console.log(data)
 	})
+
+
+
+
+
+
+
+	// 🚀显示文件选择框 _________________________________________________________________________________
+	let btn = document.querySelector('#dialog')
+	let btnErr = document.querySelector('#btn-err')
+	
+	 // 打开系统的文件选择器
+	btn.addEventListener('click', () => {
+		dialog.showOpenDialog({
+			defaultPath: __dirname, //默认打开的路径 (defaultPath: __dirname 这样为当前文件夹的路径)
+			buttonLabel: '选择', //确认的按钮文案
+			title: '对话框的标题', //title 文案
+			properties: [ //👈文件相关的配置项
+				// 'openDirectory',  // 打开目录
+				'openFile', // 打开文件
+				'multiSelections', // 允许多选
+				"createDirectory" // 允许创建目录
+			],
+			filters: [ // 🔥提供一个过滤器
+				{ 
+					name: '图片文件', 
+					extensions: ['jpg', 'png', 'gif'] //扩展名
+				},
+				{
+					name: '代码文件',
+					extensions: ['js', 'css', 'html']
+				},
+				{
+					name: '媒体文件',
+					extensions: ['avi', 'pm4', 'wmv']
+				}
+			]
+		}).then((res) => { //在渲染进程中 (index.html) 可以获得到返回的值（文件选择后的文件信息）
+			console.log(res)
+		})
+	})
+
+	// 打开系统的报错对话框
+	btnErr.addEventListener('click', () => {
+		dialog.showErrorBox(
+			'自定义标题',
+			'错误内容'
+		)
+	})
+
+
+
+
+
+
+
+	// 打开 URL ————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+	let urlBtn = document.querySelector('#openURL')
+	let openFileBtn = document.querySelector('#openFile')
+
+	// 打开外部链接
+	urlBtn.addEventListener('click', (e) => {
+		e.preventDefault()//禁用 a 标签的默认行为
+	
+		let urlPath = urlBtn.getAttribute('href') //获取 a 标签的 href 属性
+		console.log(urlPath)
+
+		shell.openExternal(urlPath) //打开外部链接(🌟利用 shell 的能力)
+	})
+
+	// 打开当前项目的目录
+	openFileBtn.addEventListener('click', (e) => {
+		shell.showItemInFolder(path.resolve(__filename)) //打开文件所在的目录
+	})
 }
+

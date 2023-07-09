@@ -13,4 +13,10 @@ window.onload = function() { //👈从 loaclStorage 中取出数据并插入到�
 	btn.addEventListener('click', () => {
 		ipcRenderer.send('stm', '这是来自 winB 的数据')
 	})
+
+
+	/// 【win to index 方法二】第二步, 接收(index 发送到 winB ）的数据
+	ipcRenderer.on('indexToWinB', (e, data) => {
+		console.log(data)
+	})
 }

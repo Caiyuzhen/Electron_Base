@@ -242,8 +242,8 @@ ipcMain.on('msg2', (e, data) => {
 
 
 
-// 接收到 winA（一个渲染进程） 发来的消息, 并且打开 winB（另一个渲染进程）
-ipcMain.on('openWinB', () => { // index.js (渲染进程)  =>  main.js（主进程中专）  =>  winB.js (渲染进程)
+// 接收到 index.js 一个渲染进程发来的消息, 并且打开 winB（另一个渲染进程）
+ipcMain.on('openWinB', (e, data) => { // index.js (渲染进程)  =>  main.js（主进程中转）  =>  winB.js (渲染进程)
 	let subWinB = new BrowserWindow({
 		width: 400,
 		height: 300,
@@ -257,6 +257,12 @@ ipcMain.on('openWinB', () => { // index.js (渲染进程)  =>  main.js（主进�
 	subWinB.loadFile('winB.html')
 	subWinB.on('close', () => {
 	})
+
+	// 【win to index 方法二】第二步, 因为是渲染了 winB, 所以可以直接拿到 winB 的数据 👇（在 winB 窗口加载完后）
+	subWinB.webContents.on('did-finish-load', () => { //（在 winB 窗口加载完后）
+		subWinB.webContents.send('indexToWinB', data)
+	})
+
 })
 
 
