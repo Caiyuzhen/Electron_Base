@@ -266,5 +266,26 @@ window.onload = function () {
 	openFileBtn.addEventListener('click', (e) => {
 		shell.showItemInFolder(path.resolve(__filename)) //打开文件所在的目录
 	})
+
+
+
+
+
+
+	// 消息通知 ————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+	let msgBtn = document.querySelector('#msgBtn')
+	msgBtn.addEventListener('click', () => {
+		// 消息的信息
+		let option = {
+			title: '消息通知的标题',
+			body: '消息通知的内容',
+			icon: './icon/rocket.ico'
+		}
+
+		let newNotification = new Notification(option.title, option) //👈创建一个新的通知
+		newNotification.onclick = () => { //👈点击通知后的回调
+			console.log('点击了这条消息')
+		}
+	})
 }
 
