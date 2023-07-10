@@ -8,6 +8,8 @@ const { ipcRenderer } = require('electron') // 引入 ipcRenderer 用于渲染�
 const { dialog } = require('@electron/remote') // 引入对话框组件
 const { shell } = require('@electron/remote')
 const path = require('path')
+const { clipboard } = require('@electron/remote')
+
 
 
 // 加载完毕后执行
@@ -42,8 +44,13 @@ window.addEventListener('DOMContentLoaded', () => {
 		let indexWindow = new BrowserWindow({
 			parent: currentWindow, //👈设置父窗口为谁 (如果有父子关系的话, 则会拖动时会跟随移动)
 			// modal: true, //需要有父子关系才能设置为 模态弹窗！ 会禁用底部的操作
-			width: 800,
+			width: 1200,
 			height: 800,
+			webPreferences: {
+				nodeIntegration: true, //👈 允许渲染进行使用 Node
+				contextIsolation: false, //👈 允许渲染进行使用 Node
+				enableRemoteModule: true, //👈 允许渲染进行使用 Node
+			}
 		})
 		
 		indexWindow.loadFile('sub.html')
@@ -287,5 +294,28 @@ window.onload = function () {
 			console.log('点击了这条消息')
 		}
 	})
+
+
+
+
+
+	// 剪切版 ————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+	const copyTextInputBar = document.querySelector('#copyText')
+	const pasteTextInputBar = document.querySelector('#pasteText')
+	const clipContent = null //👈用来保存剪切版的内容
+
+	console.log(clipboard)
+
+	// 复制内容
+	copyText.addEventListener('click', () => {
+		clipContent = clipboard.writeText(copyTextInputBar.value) //👈调用剪切版, writeText 为复制文本内容
+	})
+
+	// 粘贴内容
+	copyText.addEventListener('click', () => {
+		pasteTextInputBar.value = clipboard.readText(clipContent) //👈调用剪切版, readText 为读取文本内容
+	})
+
+	
 }
 
