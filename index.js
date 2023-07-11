@@ -8,7 +8,7 @@ const { ipcRenderer } = require('electron') // 引入 ipcRenderer 用于渲染�
 const { dialog } = require('@electron/remote') // 引入对话框组件
 const { shell } = require('@electron/remote')
 const path = require('path')
-const { clipboard } = require('@electron/remote')
+const { clipboard, nativeImage } = require('@electron/remote')
 
 
 
@@ -45,7 +45,7 @@ window.addEventListener('DOMContentLoaded', () => {
 			parent: currentWindow, //👈设置父窗口为谁 (如果有父子关系的话, 则会拖动时会跟随移动)
 			// modal: true, //需要有父子关系才能设置为 模态弹窗！ 会禁用底部的操作
 			width: 1200,
-			height: 800,
+			height: 1000,
 			webPreferences: {
 				nodeIntegration: true, //👈 允许渲染进行使用 Node
 				contextIsolation: false, //👈 允许渲染进行使用 Node
@@ -302,20 +302,40 @@ window.onload = function () {
 	// 剪切版 ————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 	const copyTextInputBar = document.querySelector('#copyText')
 	const pasteTextInputBar = document.querySelector('#pasteText')
-	const clipContent = null //👈用来保存剪切版的内容
+	const copyTextBtn = document.querySelector('#copyButton')
+	const pasteTextBtn = document.querySelector('#pasteButton')
+	const pasteImgBtn = document.querySelector('#pasteImg')
+	let clipContent = null //👈用来保存剪切版的内容
 
 	console.log(clipboard)
 
 	// 复制内容
-	copyText.addEventListener('click', () => {
+	copyTextBtn.addEventListener('click', () => {
 		clipContent = clipboard.writeText(copyTextInputBar.value) //👈调用剪切版, writeText 为复制文本内容
 	})
 
 	// 粘贴内容
-	copyText.addEventListener('click', () => {
+	pasteTextBtn.addEventListener('click', () => {
 		pasteTextInputBar.value = clipboard.readText(clipContent) //👈调用剪切版, readText 为读取文本内容
 	})
 
+
+
+	// 往剪切板内复制图片, 需要用到 nativeImage 模块
+	pasteImgBtn.addEventListener('click', () => {
+		// 将图片放置于剪切板时要求图片类型属于 nativeImage 实例
+		let imgUrl = nativeImage.createFromPath('./icon/icon_cms.png') //模拟获得了图片路径
+		clipboard.writeImage(imgUrl)
+
+		// 将【剪切板】中的图片作为 DOM 元素展示在界面上
+		let imgPath = clipboard.readImage()
+		console.log(imgPath)
+
+		// 创建一个 DOM 节点
+		const imgDOM = new Image()
+		imgDOM.src = imgPath.toDataURL() //🌟转为 base64 的图片格式
+		document.body.appendChild(imgDOM)
+	})
 	
 }
 

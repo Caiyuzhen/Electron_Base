@@ -215,12 +215,17 @@
 
 		<!-- 剪切版 -->
 		<br>
-		<input type="text" id="copyText" placeholder="input sth"><button>复制</button>
+		<input type="text" id="copyText" placeholder="input sth">
+			<button id="copyButton">复制</button>
 		<br>
-		<input type="text" id="pasteText" placeholder="paste sth"><button>粘贴</button>
+		<input type="text" id="pasteText" placeholder="paste sth">
+			<button id="pasteButton">粘贴</button>
+		<br>
+		<button id="pasteImg">拷贝图片至剪切板再粘贴到界面内</button>
 
 
 		<!-- 主进程与渲染进程的通讯 -->
+		<br>
 		<button class="btn-55">发送异步信息给主进程</button>
 		<button class="btn-66">发送同步信息给主进程</button>
 	</div>
